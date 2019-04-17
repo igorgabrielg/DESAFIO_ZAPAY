@@ -4,6 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 nomes = []
+avistas = []
 
 # Obtem o codigo
 def code_html():
@@ -14,25 +15,31 @@ def code_html():
 def gerar_nomes(soup):
     return soup.findAll("h2", {"class": "woocommerce-loop-product__title"})
 
-# Gera o relatorio
-def gerar_relatorio(codnomes):
-    for i in (codnomes):
+def gerar_a_vista(soup):
+    return soup.findAll("span", {"class": "price"})
+
+# Gera o relatorio dos
+def gerar_relatorio(codnomes, codavistas):
+    for i in range(len(codnomes)):
         # Nome
-        nomes.append(i.text)
+        nomes.append(codnomes[i].text)
+        # valor a vista
+        avistas.append(codavistas[i].text)
 
     date = {
             'Nomes': nomes,
+            'Valores a vista': avistas
         }
-    print(date)
 
-    return pd.DataFrame(date)
+    df = pd.DataFrame(date)
+
+    return df
 
 def run():
     soup = code_html()
     codnomes = gerar_nomes(soup)
-    df = gerar_relatorio(codnomes)
-    
-    print(df)
+    codavistas = gerar_a_vista(soup)
+    print(gerar_relatorio(codnomes, codavistas))
 
 if __name__ == '__main__':
     run()
