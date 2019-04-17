@@ -1,24 +1,63 @@
-import unittest
+import unittest #Biblioteca tdd
 import desafio
 from bs4 import BeautifulSoup
 
-code = '<h2 class="woocommerce-loop-product__title">produto1</h2>\
+class MyTest(unittest.TestCase): #classe basica do tdd
+    # Configura
+    def setUp(self):
+        self.code = '<li class="type-product status-publish"><img src="link1.html"></img></li>\
+        <h2 class="woocommerce-loop-product__title">produto1</h2>\
         <span class="price">R$00,00</span>\
+        <div class="installments">div 1</div>\
+        <li class="type-product status-publish"><img src="link2.html"></img></li>\
         <h2 class="woocommerce-loop-product__title">produto2</h2>\
-        <span class="price">R$00,01</span>'
+        <span class="price">R$00,01</span>\
+       <div class="installments">div 2</div>'
+        
+        self.soup = BeautifulSoup(self.code, 'html.parser')
+        self.codnomes = desafio.gerar_nomes(self.soup)
+        self.codimgs = desafio.gerar_link(self.soup)
+        self.codavistas = desafio.gerar_a_vista(self.soup)
+        self.codivididos = desafio.gerar_dividido(self.soup)
 
+    # Desmonta
+    def teardown(self):
+        del self.code
+        del self.soup
+        del self.codnomes
+        del self.codimgs
+        del self.codavistas
+        del self.codivididos
 
-soup = BeautifulSoup(code, 'html.parser')
+    # Teste Nomes
+    def test_gerar_nomes(self):
+        self.assertEqual('<h2 class="woocommerce-loop-product__title">produto1</h2>', str(self.codnomes[0]))
+        self.assertEqual('<h2 class="woocommerce-loop-product__title">produto2</h2>', str(self.codnomes[1]))
 
+    # Teste links
+    def test_gerar_links(self):
+        self.assertEqual('<li class="type-product status-publish"><img src="link1.html"/></li>', str(self.codimgs[0]))
+        self.assertEqual('<li class="type-product status-publish"><img src="link2.html"/></li>', str(self.codimgs[1]))
 
-class MyTest(unittest.TestCase): #Classe de teste do unittest
-    def test_gerar_nomes(self): #Teste do Nome
-        self.assertEqual('<h2 class="woocommerce-loop-product__title">produto1</h2>', str(desafio.gerar_nomes(soup)[0]))
-        self.assertEqual('<h2 class="woocommerce-loop-product__title">produto2</h2>', str(desafio.gerar_nomes(soup)[1]))
+    # Teste a vista
+    def test_gerar_a_vista(self):
+        self.assertEqual('<span class="price">R$00,00</span>', str(self.codavistas[0]))
+        self.assertEqual('<span class="price">R$00,01</span>', str(self.codavistas[1]))
 
-    def test_gerar_a_vista(self): #Teste do valor avista
-        self.assertEqual('<span class="price">R$00,00</span>', str(desafio.gerar_a_vista(soup)[0]))
-        self.assertEqual('<span class="price">R$00,01</span>', str(desafio.gerar_a_vista(soup)[1]))        
+    # Teste dividido
+    def test_gerar_dividido(self):
+        self.assertEqual('<div class="installments">div 1</div>', str(self.codivididos[0]))
+        self.assertEqual('<div class="installments">div 2</div>', str(self.codivididos[1]))
+
+    # Teste relatorio
+    def test_gerar_relatorio(self):
+        codnomes = desafio.gerar_nomes(self.soup)
+        codimgs = desafio.gerar_link(self.soup)
+        codavistas = desafio.gerar_a_vista(self.soup)
+        codivididos = desafio.gerar_dividido(self.soup)
+
+        self.assertEqual({0: 'R$00,00', 1: 'R$00,01'}, desafio.gerar_relatorio(codnomes, codimgs, codavistas, codivididos).to_dict())
+
 
 if __name__ == '__main__': 
     unittest.main()
