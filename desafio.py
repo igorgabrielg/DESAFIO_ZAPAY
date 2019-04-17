@@ -11,8 +11,11 @@ divididos = []
 
 # Obtem codigo da pagina
 def code_html():
-    page = requests.get("https://nerdstore.com.br/categoria/especiais/game-of-thrones/")
-    return BeautifulSoup(page.text, 'html.parser')
+    try:
+        page = requests.get("https://nerdstore.com.br/categoria/especiais/game-of-thrones/")
+        return BeautifulSoup(page.text, 'html.parser')
+    except OSError:
+        print("Verifique sua conexão com a internet e tente novamente.")
 
 
 # Obtem tag dos nomes

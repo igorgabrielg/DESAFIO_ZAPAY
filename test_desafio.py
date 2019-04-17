@@ -1,10 +1,10 @@
-import unittest #Biblioteca tdd
+import unittest
 import desafio
 from bs4 import BeautifulSoup
 
 
-class MyTest(unittest.TestCase): #classe basica do tdd
-
+# classe basica do tdd
+class MyTest(unittest.TestCase):
 
     # Configura
     def setUp(self):
@@ -23,7 +23,6 @@ class MyTest(unittest.TestCase): #classe basica do tdd
         self.codavistas = desafio.gerar_a_vista(self.soup)
         self.codivididos = desafio.gerar_dividido(self.soup)
 
-
     # Desmonta
     def teardown(self):
         del self.code
@@ -33,30 +32,25 @@ class MyTest(unittest.TestCase): #classe basica do tdd
         del self.codavistas
         del self.codivididos
 
-
     # Teste Nomes
     def test_gerar_nomes(self):
         self.assertEqual('<h2 class="woocommerce-loop-product__title">produto1</h2>', str(self.codnomes[0]))
         self.assertEqual('<h2 class="woocommerce-loop-product__title">produto2</h2>', str(self.codnomes[1]))
-
 
     # Teste links
     def test_gerar_links(self):
         self.assertEqual('<li class="type-product status-publish"><img src="link1.html"/></li>', str(self.codimgs[0]))
         self.assertEqual('<li class="type-product status-publish"><img src="link2.html"/></li>', str(self.codimgs[1]))
 
-
     # Teste a vista
     def test_gerar_a_vista(self):
         self.assertEqual('<span class="price">R$00,00</span>', str(self.codavistas[0]))
         self.assertEqual('<span class="price">R$00,01</span>', str(self.codavistas[1]))
 
-
     # Teste dividido
     def test_gerar_dividido(self):
         self.assertEqual('<div class="installments">div 1</div>', str(self.codivididos[0]))
         self.assertEqual('<div class="installments">div 2</div>', str(self.codivididos[1]))
-
 
     # Teste relatorio
     def test_gerar_relatorio(self):
