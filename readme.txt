@@ -1,3 +1,10 @@
+Instrução:
+
+Instale as dependencias com:
+
+pip install -r requirements.txt
+
+
 DESAFIO ZAPAY
 
 1° Passo foi estudar o codigo da pagina em busca de padrões:
@@ -20,4 +27,3 @@ DESAFIO ZAPAY
 5° Passo foi tratar o dado trasformando em informação, ou seja, apenas o texto importante.
 
 6° Passo foi trasformar as informações em um relatorio CSV.
-
