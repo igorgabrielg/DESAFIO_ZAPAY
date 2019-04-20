@@ -59,6 +59,8 @@ def gerar_relatorio(codnomes, codimgs, codavistas, codivididos):
 
     df = pd.DataFrame(date)
 
+    df.to_csv('relatorio_dos_produtos.csv')
+
     return df
 
 
