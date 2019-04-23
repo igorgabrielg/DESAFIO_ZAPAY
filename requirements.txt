@@ -1,4 +1,4 @@
-re
 requests
 pandas
 bs4
+re
