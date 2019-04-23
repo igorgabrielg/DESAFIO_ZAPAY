@@ -1,3 +1,4 @@
+import os
 import unittest
 import desafio
 from bs4 import BeautifulSoup
@@ -32,13 +33,18 @@ class MyTest(unittest.TestCase):
         del self.codavistas
         del self.codivididos
 
+    # Teste Obter Codigo HTML
+    def test_code_html(self):
+        soup = desafio.code_html()
+        self.assertEqual("Game of Thrones na Nerdstore", soup.title.text)
+
     # Teste Nomes
     def test_gerar_nomes(self):
         self.assertEqual('<h2 class="woocommerce-loop-product__title">produto1</h2>', str(self.codnomes[0]))
         self.assertEqual('<h2 class="woocommerce-loop-product__title">produto2</h2>', str(self.codnomes[1]))
 
     # Teste links
-    def test_gerar_links(self):
+    def test_gerar_link(self):
         self.assertEqual('<li class="type-product status-publish"><img src="link1.html"/></li>', str(self.codimgs[0]))
         self.assertEqual('<li class="type-product status-publish"><img src="link2.html"/></li>', str(self.codimgs[1]))
 
@@ -64,6 +70,9 @@ class MyTest(unittest.TestCase):
                           'Valores a vista': {0: 'R$00,00', 1: 'R$00,01'},
                           'Valores dividido': {0: 'div 1', 1: 'div 2'}},
                          desafio.gerar_relatorio(codnomes, codimgs, codavistas, codivididos).to_dict())
+        
+        self.assertTrue(os.path.isfile(os.path.join(os.path.abspath(''), 'relatorio_dos_produtos.csv')))
+        
 
 
 if __name__ == '__main__': 
