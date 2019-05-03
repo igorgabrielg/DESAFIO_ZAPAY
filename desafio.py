@@ -8,34 +8,47 @@ links = []
 avistas = []
 divididos = []
 
-
 # Obtem codigo da pagina
-def code_html():
-    try:
-        page = requests.get("https://nerdstore.com.br/categoria/especiais/game-of-thrones/")
-        return BeautifulSoup(page.text, 'html.parser')
-    except OSError:
-        print("Verifique sua conexão com a internet e tente novamente.")
+
+try:
+    page = requests.get("https://nerdstore.com.br/categoria/especiais/game-of-thrones/")
+    soup = BeautifulSoup(page.text, 'html.parser')
+except OSError:
+    print("Verifique sua conexão com a internet e tente novamente.")
+
+
+# Decorador
+def obter_dados(soup, tag, tipo):
+    # Função Interna
+    def valida(func):
+        def inner(*args):
+                return soup.findAll(tag, {"class": tipo})
+        return inner
+    return valida
 
 
 # Obtem tag dos nomes
-def gerar_nomes(soup):
-    return soup.findAll("h2", {"class": "woocommerce-loop-product__title"})
+@obter_dados(soup, "h2", "woocommerce-loop-product__title")
+def gerar_nomes():
+    return valor
 
 
 # Obtem tag dos valores a vista
-def gerar_a_vista(soup):
-    return soup.findAll("span", {"class": "price"})
+@obter_dados(soup, "span", "price")
+def gerar_a_vista():
+    return valor
 
 
 # Obtem tag dos valor dividido
-def gerar_dividido(soup):
-    return soup.findAll("div", {"class": "installments"})
+@obter_dados(soup, "div", "installments")
+def gerar_dividido():
+    return valor
 
 
 # Obtem tag dos link das imagens
-def gerar_link(soup):
-    return soup.findAll("li", attrs={'class': re.compile("type-product status-publish")})
+@obter_dados(soup, "li", re.compile("product type-product"))
+def gerar_link():
+    return valor
 
 
 # Gera Relatorio apenas os
@@ -65,11 +78,11 @@ def gerar_relatorio(codnomes, codimgs, codavistas, codivididos):
 
 
 def run():
-    soup = code_html()
-    codnomes = gerar_nomes(soup)
-    codimgs = gerar_link(soup)
-    codavistas = gerar_a_vista(soup)
-    codivididos = gerar_dividido(soup)
+
+    codnomes = gerar_nomes()
+    codimgs = gerar_link()
+    codavistas = gerar_a_vista()
+    codivididos = gerar_dividido()
     print(gerar_relatorio(codnomes, codimgs, codavistas, codivididos))
 
 
